@@ -42,10 +42,10 @@ def isVaildDate(date):
 	except ValueError:
 		return 0
 		
-def isNeedToAdd(code):
-	if os.path.exists("instance.csv") == False:
+def isNeedToAdd(code,filename):
+	if os.path.exists(filename) == False:
 		return 1
-	csvFile = open("instance.csv", "r")
+	csvFile = open(filename, "r")
 
 	reader = csv.reader(csvFile)
 
@@ -76,19 +76,21 @@ def changeStyleOfCode(code):
         return 'sz'+code
 if __name__ == '__main__':
     codeList = getCodeList("code.dat")
-    csvFile = open("instance.csv", "a",newline='')
-    writer = csv.writer(csvFile)
     for code in codeList:
-        #print(changeStyleOfCode(code))
         codeClear = code.strip()
         fullcode = changeStyleOfCode(codeClear)
+        csvFile = open(codeClear+".csv", "a",newline='')
+        writer = csv.writer(csvFile)
+
+        #print(changeStyleOfCode(code))
+
         lists = getDataByCode(fullcode)
         lists.insert(0,codeClear)
         #print(lists)
-        if isNeedToAdd(codeClear) > 0:
+        if isNeedToAdd(codeClear,codeClear+".csv") > 0:
             print(codeClear)
             writer.writerow(lists)
-    csvFile.close()
+        csvFile.close()
 # 写入的内容都是以列表的形式传入函数
 #writer.writerow(fileHeader)
 #writer.writerow(d1)
